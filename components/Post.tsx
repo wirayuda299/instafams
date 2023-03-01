@@ -1,12 +1,9 @@
 'use client'
-import { doc, getDoc } from 'firebase/firestore'
-import { debounce } from 'lodash'
-import { FC, useEffect, useState } from 'react'
-import { db } from '@/config/firebase'
+import { FC, useState, useEffect} from 'react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { FaRegComment } from 'react-icons/fa'
 import { BiBookmark } from 'react-icons/bi'
-import { BsFillBookmarkFill, BsThreeDots } from 'react-icons/bs'
+import {  BsThreeDots } from 'react-icons/bs'
 import { IUserPostProps } from '@/types/post'
 import { handleFollow } from '@/helper/follow'
 import { savePost } from '@/helper/savePost'
@@ -21,15 +18,16 @@ export interface ICommentsProps {
   commentByUid: string
 }
 export interface IPostCardProps {
-  post: IUserPostProps 
-  refetch: () => void
+  post: IUserPostProps
+  followingLists: { userId: string }[]
 }
 
-export const PostCard: FC<IPostCardProps> = ({ post, refetch}) => {
+export const PostCard: FC<IPostCardProps> = ({ post, followingLists}) => {
   const [disabled, setDisabled] = useState<boolean>(false)
   const [comment, setComment] = useState<string>('')
   const [commentOpen, setCommentOpen] = useState<boolean>(false)
   const { data: session } = useSession()
+
 
   return (
     <div className="w-full">
@@ -47,8 +45,8 @@ export const PostCard: FC<IPostCardProps> = ({ post, refetch}) => {
             <span className="text-sm font-semibold antialiased block leading-tight">{post?.author}</span>
           </div>
           {session?.user.uid !== post.postedById ? (
-            <button onClick={() => handleFollow(post.postedById, session?.user.uid, session?.user.username, refetch)} className="follBtn text-xs  antialiased block leading-tight" data-postid={post.postedById}>
-              Follow
+            <button onClick={() => handleFollow(post.postedById, session?.user.uid, session?.user.username)} className="follBtn text-xs  antialiased block leading-tight" data-postid={post.postedById}>
+              {followingLists?.map((user) => user.userId).includes(post.postedById) ? 'Following' : 'Follow'}
             </button>
           ) : null}
           {session?.user.uid === post.postedById ? (
@@ -73,7 +71,7 @@ export const PostCard: FC<IPostCardProps> = ({ post, refetch}) => {
           <div className="flex gap-x-5">
             <button
               disabled={disabled}
-              onClick={() => handleLikes(post, setDisabled, session?.user?.uid, refetch)}>
+              onClick={() => handleLikes(post, setDisabled, session?.user?.uid)}>
               {post.likedBy.includes(session?.user.uid ?? '')
                 ? <AiFillHeart className="text-3xl text-red-600" /> : <AiOutlineHeart className="text-3xl" />
               }
@@ -83,7 +81,7 @@ export const PostCard: FC<IPostCardProps> = ({ post, refetch}) => {
             </button>
           </div>
           <div className="flex">
-            <button className='saveBtn' data-saveid={post.postId} onClick={() => savePost(post, session?.user?.uid, refetch)} >
+            <button className='saveBtn' data-saveid={post.postId} onClick={() => savePost(post, session?.user?.uid)} >
               <BiBookmark className="text-3xl" />
             </button>
           </div>
@@ -99,7 +97,7 @@ export const PostCard: FC<IPostCardProps> = ({ post, refetch}) => {
         </div>
         <form
           className='py-1 px-1'
-          onSubmit={(e) => handleComment(e, comment, post, setComment, session?.user.uid, session?.user.username, refetch)}>
+          onSubmit={(e) => handleComment(e, comment, post, setComment, session?.user.uid, session?.user.username)}>
           <input
             type="text"
             placeholder='Add a comment'

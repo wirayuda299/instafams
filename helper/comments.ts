@@ -2,6 +2,7 @@ import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { FormEvent } from "react";
 import { db } from "../config/firebase";
 import { IUserPostProps } from "@/types/post";
+import { getPosts } from "./getPosts";
 
 interface IProps {
   e: FormEvent<HTMLFormElement>,
@@ -10,7 +11,7 @@ interface IProps {
   setComment: React.Dispatch<React.SetStateAction<string>>,
 }
 
-export async function handleComment(e: FormEvent, comment: string, post: IUserPostProps, setComment: React.Dispatch<React.SetStateAction<string>>, uid:string='', name:string='', refetch:() => void): Promise<void> {
+export async function handleComment(e: FormEvent, comment: string, post: IUserPostProps, setComment: React.Dispatch<React.SetStateAction<string>>, uid:string='', name:string=''): Promise<void> {
   e.preventDefault()
   if (comment === '') return
   try {
@@ -21,10 +22,10 @@ export async function handleComment(e: FormEvent, comment: string, post: IUserPo
         comment: comment,
         commentByName: name
       })
-    }).then(() => {
+    }).then(async () => {
       console.log('success')
       setComment('')
-      refetch()
+      await getPosts()
     });
   } catch (error) {
     console.log(error);

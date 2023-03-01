@@ -1,18 +1,23 @@
-'use client'
-import { useSession } from "next-auth/react";
 import Image from 'next/image'
-import { getDocs, query, collection } from "firebase/firestore"
-import { db } from '@/config/firebase'
-import { useQuery } from "react-query";
-import { getUser } from "@/helper/getUser";
+import { getServerSession } from 'next-auth'
+import { JWT } from "next-auth/jwt";
+import { getUser } from '@/helper/getUser';
 
-export default function Suggestions() {
-  const { data: session } = useSession()
-  const { data, isError } = useQuery('users',() => getUser(session?.user?.uid))
+export default async function Suggestions() {
+  const session = await getServerSession({
+    callbacks: {
+      async session({ session, token }: { session: any, token: JWT }) {
+        if (session && session.user) {
+          session.user.username = session.user?.name.split(' ').join('').toLocaleLowerCase();
+          session.user.uid = token.sub;
+        }
+        return session;
+      }
+    }
+  })
+  const users = await getUser(session.user.uid)
 
-  if (isError) {
-    return <div>Something went wrong</div>
-  }
+
 
   return (
     <div className='w-full h-full p-5 max-w-sm'>
@@ -42,7 +47,7 @@ export default function Suggestions() {
         </button>
       </div>
       <div>
-        {data?.map((user) => (
+        {users?.map((user) => (
           <div key={user.uid} className='flex items-center space-x-2 mb-2 mt-5 w-full justify-between'>
             <div className="flex space-x-2 items-center pb-3">
               <Image
@@ -61,8 +66,7 @@ export default function Suggestions() {
               <button className='text-blue-600 font-light text-xs'>Follow</button>
             </div>
           </div>
-        )
-        )}
+        ))}
       </div>
     </div>
 

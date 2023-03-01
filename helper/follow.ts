@@ -2,8 +2,8 @@ import { doc, getDoc, arrayRemove, arrayUnion, updateDoc } from "firebase/firest
 import { db } from "@/config/firebase";
 import { IFollowerProps } from "@/types/follower";
 import { IUserPostProps } from "@/types/post";
-
-export async function handleFollow(id: string = '', uid:string ='', followedByName:string='', refetch:() => void): Promise<void> {
+import { getPosts } from "./getPosts";
+export async function handleFollow(id: string = '', uid:string ='', followedByName:string=''): Promise<void> {
   try {
     const userPostContent = doc(db, 'users', id);
     const currentUserRef = doc(db, 'users', `${uid}`);
@@ -38,8 +38,8 @@ export async function handleFollow(id: string = '', uid:string ='', followedByNa
       await Promise.all([
         updateDoc(userPostContent, updateAuthorFollowersLists),
         updateDoc(currentUserRef, updateCurrentUserFollowingLists)
-      ]).then(() => {
-        refetch()
+      ]).then(async () => {
+        await getPosts()
         if (hasFollow) {
           follBtns.forEach(btn => btn.innerHTML = 'Follow')
         } else {

@@ -3,7 +3,7 @@ import { db } from "../config/firebase"
 import { IUserPostProps } from "@/types/post"
 import { getPosts } from "./getPosts"
 
-export async function handleLikes(post:IUserPostProps, setDisabled:React.Dispatch<React.SetStateAction<boolean>>, uid:string='', refetch: () => void): Promise<void> {
+export async function handleLikes(post:IUserPostProps, setDisabled:React.Dispatch<React.SetStateAction<boolean>>, uid:string=''): Promise<void> {
   setDisabled(true)
   try {
     const res = doc(db, 'posts', `post-${post.postId}`)
@@ -23,7 +23,7 @@ export async function handleLikes(post:IUserPostProps, setDisabled:React.Dispatc
     console.log(error.message);
   } finally {
     setDisabled(false)
-    refetch()
+    await getPosts()
 
   }
 }

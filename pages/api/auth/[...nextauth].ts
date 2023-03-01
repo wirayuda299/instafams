@@ -24,3 +24,25 @@ export default NextAuth({
 	
 	
 })
+
+export const authOptions = {
+	providers: [
+		GoogleProvider({
+			clientId: process.env.GOOGLE_ID ?? '',
+      clientSecret: process.env.GOOGLE_SECRET ?? '',
+		})
+	],
+	pages: {
+		signIn : '/auth/signin',
+	},
+	callbacks: {
+		async session({ session, token }: { session: any, token: JWT }) {
+			if (session && session.user) {
+				session.user.username = session.user?.name.split(' ').join('').toLocaleLowerCase();
+				session.user.uid = token.sub;
+			}
+			return session;
+		}
+	},
+	
+}

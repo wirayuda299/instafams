@@ -10,3 +10,13 @@ export async function getUser(uid:string ='') {
     console.log(error.message);   
   } 
 }
+export async function getUserByUid(uid: string = '') {
+  try {
+    const q = query(collection(db, 'users'), where('uid', '==', uid))
+    const res = await getDocs(q)
+    return res.docs
+
+  } catch (error: any) {
+    console.log(error.message);
+  }
+}
