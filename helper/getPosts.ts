@@ -1,6 +1,7 @@
 import { db } from "@/config/firebase";
 import { IUserPostProps } from "@/types/post";
 import { getDocs, query, collection, orderBy } from "firebase/firestore";
+
 export const getPosts = async () => {
   try {
     const getPostDesc = await getDocs(query(collection(db, 'posts'), orderBy('createdAt', 'desc')))

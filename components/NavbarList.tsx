@@ -75,16 +75,18 @@ export const NavbarList: FC<IProps> = () => {
   return (
     <ul className='flex w-full dark:bg-black justify-center items-center sm:items-start flex-row md:flex-col px-1 transition-all ease duration-500'>
       {navList.map(list => (
-        <Link
+        <li
           key={list.id}
-          href={list.path}
-          hrefLang='en'
-          className={`font-light  py-4 text-base sm:text-lg hover:bg-gray-200 px-3  transition-all ease duration-300 rounded-full w-full dark:hover:bg-[#b9b9b917] hover:bg-[#a8a8a817] ${list.id === 2 || list.id === 4 ? 'hidden md:block' : ''}`}>
-          <button className={`flex space-x-2 `} name={list.title}>
-            {list.icon}
-            <span className='hidden lg:block'>{list.title}</span>
-          </button>
-        </Link>
+          className={`font-light px-3 py-4 text-base hover:bg-gray-200  transition-all ease duration-300 rounded-full w-full dark:hover:bg-[#b9b9b917] hover:bg-[#a8a8a817] ${list.id === 2 || list.id === 4 ? 'hidden md:block' : ''}`}>
+          <Link
+            href={list.path}
+            hrefLang='en'>
+            <button className={`flex space-x-2 `} name={list.title}>
+              {list.icon}
+              <span className='hidden lg:block'>{list.title}</span>
+            </button>
+          </Link>
+        </li>
       ))}
       <ExtraMenus />
       <ExtraMenuBtn />

@@ -10,8 +10,7 @@ export async function savePost(post: IUserPostProps, uid: string = '') {
     const getSavedPosts = user?.map((user) => user?.savedPosts)
     const isAlreadySavedByUser = getSavedPosts[0]?.some((posts: { postId: string }) => posts.postId === post.postId)
     const btn = document.querySelector(`[data-postid='${post.postId}']`)
-    console.log(btn);
-    
+
     if (isAlreadySavedByUser) {
       await updateDoc(userRef, { savedPosts: arrayRemove(post) })
         .then(async () => {
@@ -24,11 +23,10 @@ export async function savePost(post: IUserPostProps, uid: string = '') {
         .then(async () => {
           btn?.classList.add('text-red-500')
           console.log('You saved this post')
-          await getPosts()
         })
     }
-   
-  } catch (error:any) {
+
+  } catch (error: any) {
     console.log(error.message);
   }
 }
