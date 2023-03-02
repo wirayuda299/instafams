@@ -11,13 +11,12 @@ import { db } from "@/config/firebase";
 interface IProps {
   post: IUserPostProps
   disabled: boolean
-  setDisabled: Dispatch<SetStateAction<boolean>>
   uid: string
   setCommentOpen: Dispatch<SetStateAction<boolean>>
   commentOpen: boolean
 }
 
-export const PostActions: FC<IProps> = ({ post, disabled, setCommentOpen, setDisabled, uid, commentOpen }) => {
+export const PostActions: FC<IProps> = ({ post, disabled, setCommentOpen, uid, commentOpen }) => {
   const [likes, setLikes] = useState<any[]>(post.likedBy)
   const [savedPosts, setSavedPosts] = useState<any[]>([])
 
@@ -44,9 +43,8 @@ export const PostActions: FC<IProps> = ({ post, disabled, setCommentOpen, setDis
     <div className="flex items-center justify-between mt-3 mb-2 p-1">
       <div className="flex gap-x-5">
         <button
-          disabled={disabled}
           data-postid={post.postId}
-          onClick={() => handleLikes(post, setDisabled, uid)}>
+          onClick={() => handleLikes(post, uid)}>
           {likes.includes(uid)
             ? <AiFillHeart className="text-3xl text-red-600" /> : <AiOutlineHeart className="text-3xl" />
           }

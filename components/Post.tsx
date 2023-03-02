@@ -63,7 +63,6 @@ export const PostCard: FC<IPostCardProps> = ({ post, followingLists, uid, userna
           disabled={disabled}
           post={post}
           setCommentOpen={setCommentOpen}
-          setDisabled={setDisabled}
           uid={uid}
         />
         <p className={`font-light text-xs px-1 mt-1 mb-4 ${likesCount < 1 ? 'hidden' : 'block'}`}>
