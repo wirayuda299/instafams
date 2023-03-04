@@ -7,7 +7,7 @@ export interface IUserPostProps {
   postedByPhotoUrl: string
   docId: string,
   likedBy: string[]
-  createdAt: string
+  createdAt: string | number
   comments: ICommentsProps[]
   hashtags: string[]
   postId: string
