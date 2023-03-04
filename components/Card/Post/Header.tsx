@@ -16,22 +16,32 @@ export const PostHeader: FC<IProps> = ({ post, currentuserUid, followingLists, u
   const [createdDate, setCreatedDate] = useState<string>('')
   useEffect(() => {
     const now = Date.now();
-    const diff = now - Number(post.createdAt) ;
+    const diff = now - Number(post.createdAt);
 
     const diffSeconds = Math.floor(diff / 1000);
     const diffMinutes = Math.floor(diff / (1000 * 60));
     const diffHours = Math.floor(diff / (1000 * 60 * 60));
     const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const diffWeeks = Math.floor(diff / (1000 * 60 * 60 * 24 * 7));
+    const diffMonths = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
+    const diffYears = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
+
 
     let diffString;
     if (diffSeconds < 60) {
-      diffString = 'now';
+      diffString = 'just now';
     } else if (diffMinutes < 60) {
       diffString = `${diffMinutes} minutes ago`;
     } else if (diffHours < 24) {
       diffString = `${diffHours} hours ago`;
+    } else if (diffDays < 7) {
+      diffString = `${diffDays} days ago`;
+    } else if (diffWeeks < 4) {
+      diffString = `${diffWeeks} weeks ago`;
+    } else if (diffMonths < 12) {
+      diffString = `${diffMonths} months ago`;
     } else {
-      diffString = `${diffDays} ${diffDays < 2 ? 'day' : 'days'} ago`;
+      diffString = `${diffYears} years ago`;
     }
     setCreatedDate(diffString)
 
@@ -49,10 +59,10 @@ export const PostHeader: FC<IProps> = ({ post, currentuserUid, followingLists, u
       <div className="ml-3 flex-1">
         <span className="text-sm font-semibold antialiased block leading-tight">
           {post?.author}
-          </span>
+        </span>
         <span className="text-xs font-thin antialiased block leading-tight">
           {createdDate}
-          </span>
+        </span>
       </div>
       {currentuserUid !== post.postedById ? (
         <button onClick={() => handleFollow(post.postedById, currentuserUid, username)} className="follBtn text-xs  antialiased block leading-tight" data-postid={post.postedById}>

@@ -1,7 +1,6 @@
 import { doc, updateDoc, arrayRemove, arrayUnion, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { IUserPostProps } from '@/types/post';
-import { getPosts } from '@/helper/getPosts';
 
 export async function handleLikes(
 	post: IUserPostProps,

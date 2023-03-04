@@ -1,10 +1,10 @@
-import { PostCard } from '@/components/Post';
+import { PostCard } from '@/components/Card/Post/Post';
 import { getServerSession } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import Image from 'next/image';
-import { getUser, getUserByUid } from '@/helper/getUser';
+import { getUserRecommendation, getCurrentUserData } from '@/helper/getUser';
 import { getPosts } from '@/helper/getPosts';
-import Loader from '@/components/Loader';
+import Loader from '@/components/Loader/Loader';
 import { Suspense } from 'react';
 
 export default async function Home() {
@@ -23,17 +23,20 @@ export default async function Home() {
 			},
 		},
 	});
-	const currentUser = await getUserByUid(session?.user.uid);
-	const users = await getUser(session.user.uid);
+	const currentUser = await getCurrentUserData(session?.user.uid);
+	const usersRecommendations = await getUserRecommendation(session.user.uid);
 	const followinglists = currentUser && currentUser[0].data().following;
-	const [posts, sessions, usersLists] = await Promise.all([getposts, session, users]);
-
+	const [posts, sessions, usersLists] = await Promise.all([getposts, session, usersRecommendations]);
+	const filteredUsers = usersLists?.filter(user => {
+		const isFollowing = followinglists.some((following:{userId:string}) => following.userId === user.uid);
+		return !isFollowing;
+	});
 	return (
 		<section className='w-full h-full md:p-3 max-w-7xl'>
 			<div className='w-full flex justify-between items-start first:flex-grow'>
 				<div className='w-full h-full flex flex-col p-5'>
 					{posts?.map((post) => (
-						<Suspense fallback={<p>Loading..</p>} key={post.docId}>
+						<Suspense fallback={<Loader/>} key={post.docId}>
 							<PostCard
 								post={post}
 								username={sessions.user.username}
@@ -71,7 +74,7 @@ export default async function Home() {
 							<button className='text-xs dark:text-blue-600 '>See All</button>
 						</div>
 						<div>
-							{usersLists?.map((user) => (
+							{filteredUsers?.map((user) => (
 								<div
 									key={user.uid}
 									className='flex items-center space-x-2 mb-2 mt-5 w-full justify-between'
@@ -92,7 +95,7 @@ export default async function Home() {
 										</div>
 									</div>
 									<div className='ml-auto'>
-										<button className='text-blue-600 font-light text-xs'>
+										<button className='text-blue-600 font-light text-xs' data-postid={user.uid}>
 											Follow
 										</button>
 									</div>

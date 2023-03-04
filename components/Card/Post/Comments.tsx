@@ -3,18 +3,19 @@ import { handleComment } from "@/helper/comments";
 import { IUserPostProps } from "@/types/post";
 import { onSnapshot, doc } from "firebase/firestore";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react"
-
+import { useRecoilState } from 'recoil';
+import { CommentsToggler } from "@/store/CommentsToggler";
 interface IProps {
   post: IUserPostProps
-  commentOpen: boolean
   comment: string
   setComment: Dispatch<SetStateAction<string>>
   uid: string
   username: string
  }
 
-export const PostComment: FC<IProps> = ({post, commentOpen, comment, setComment, uid,username}) => {
+export const PostComment: FC<IProps> = ({post, comment, setComment, uid,username}) => {
   const [currentComments , setCurrentComments] = useState<any[]>(post.comments)
+  const [commentOpen , setCommentOpen] = useRecoilState(CommentsToggler)
   useEffect(() => {
     onSnapshot(doc(db, 'posts', `post-${post.postId}`), (doc) => {
       if(doc.exists()) {

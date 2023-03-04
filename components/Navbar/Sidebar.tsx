@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { AiOutlineInstagram } from 'react-icons/ai'
 import Link from 'next/link';
 import { Oleo_Script } from '@next/font/google'
-import { NavbarList } from './NavbarList'
+import { NavbarList } from './Lists'
 
 const oleo = Oleo_Script({
   subsets: ['latin', 'latin-ext'],

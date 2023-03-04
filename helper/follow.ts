@@ -4,11 +4,11 @@ import { IFollowerProps } from "@/types/follower";
 import { IUserPostProps } from "@/types/post";
 export async function handleFollow(id: string = '', uid:string ='', followedByName:string=''): Promise<void> {
   try {
-    const userPostContent = doc(db, 'users', id);
+    const userRef = doc(db, 'users', id);
     const currentUserRef = doc(db, 'users', `${uid}`);
 
     const [getUsers] = await Promise.all([
-      getDoc(userPostContent),
+      getDoc(userRef),
       getDoc(currentUserRef)
     ]);
 
@@ -35,7 +35,7 @@ export async function handleFollow(id: string = '', uid:string ='', followedByNa
         : { following: arrayUnion({ userId: id }) };
 
       await Promise.all([
-        updateDoc(userPostContent, updateAuthorFollowersLists),
+        updateDoc(userRef, updateAuthorFollowersLists),
         updateDoc(currentUserRef, updateCurrentUserFollowingLists)
       ]).then(async () => {
         if (hasFollow) {
@@ -45,16 +45,7 @@ export async function handleFollow(id: string = '', uid:string ='', followedByNa
         }
       })
     }
-  } catch (error) {
-    console.log(error);
+  } catch (error:any) {
+    console.log(error.message);
   }
 };
-
-export const hasFollowByUser = async (post:IUserPostProps, uid:string ='') => {
-  const docRef = doc(db, 'users', `${post.postedById}`);
-    const res = await getDoc(docRef)
-    if (res) {
-      const hasFollow: boolean = res.data()?.followers.some((follower: IFollowerProps) => follower.followedBy === uid);
-      return hasFollow
-    }
-}

@@ -6,7 +6,7 @@ import { MdOutlineExplore } from "react-icons/md";
 import { RiMessengerLine } from "react-icons/ri";
 import { ExtraMenus } from "./ExtraMenus";
 import Image from "next/image";
-import { ExtraMenuBtn } from "./ExtraMenuBtn";
+import { ExtraMenuBtn } from "../Card/Post/ExtraMenuBtn";
 
 interface IProps {
   extraListOpen: boolean

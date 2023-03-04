@@ -4,22 +4,23 @@ import { IUserPostProps } from "@/types/post";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react"
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BiBookmark, BiBookmarkHeart } from "react-icons/bi";
-import { FaRegComment } from "react-icons/fa";
-import { doc, onSnapshot, collection, query } from 'firebase/firestore'
+import { FaBookmark, FaRegComment } from "react-icons/fa";
+import { doc, onSnapshot } from 'firebase/firestore'
 import { db } from "@/config/firebase";
-
+import { CommentsToggler } from "@/store/CommentsToggler";
+import { useRecoilState } from "recoil";
+import { BsFillBookmarkFill } from "react-icons/bs";
+import {FiBookmark} from "react-icons/fi";
+import { RiBookmarkFill, RiBookmarkLine } from "react-icons/ri";
 interface IProps {
   post: IUserPostProps
-  disabled: boolean
   uid: string
-  setCommentOpen: Dispatch<SetStateAction<boolean>>
-  commentOpen: boolean
-  setDisabled: Dispatch<SetStateAction<boolean>>
 }
 
-export const PostActions: FC<IProps> = ({ post, disabled, setCommentOpen, uid, commentOpen, setDisabled }) => {
+export const PostActions: FC<IProps> = ({ post, uid }) => {
   const [likes, setLikes] = useState<any[]>([])
   const [savedPosts, setSavedPosts] = useState<any[]>([])
+  const [commentOpen , setCommentOpen] = useRecoilState(CommentsToggler)
 
   useEffect(() => {
     onSnapshot(doc(db, 'posts', `post-${post.postId}`), async (doc) => {
@@ -43,10 +44,12 @@ export const PostActions: FC<IProps> = ({ post, disabled, setCommentOpen, uid, c
       <div className="flex gap-x-5">
         <button
           onClick={() => handleLikes(post, uid) }
-          data-postid={post.postId}>
+          data-postid={post.postId}
+          className='transition-all ease duration-500'
+          >
           {likes.includes(uid)
             ?
-            <AiFillHeart className="text-3xl animate-pulse text-red-600" />
+            <AiFillHeart className="text-3xl text-red-600 " />
             :
             <AiOutlineHeart className="text-3xl" />
 
@@ -59,9 +62,9 @@ export const PostActions: FC<IProps> = ({ post, disabled, setCommentOpen, uid, c
       <div className="flex">
         <button className='saveBtn' data-saveid={post.postId} onClick={() => savePost(post, uid)} >
           {savedPosts.map(post => post.postId).includes(post.postId) ? (
-            <BiBookmarkHeart className="text-3xl" />
+            <RiBookmarkFill className="text-3xl" />
           ) : (
-            <BiBookmark className="text-3xl" />
+            <RiBookmarkLine className="text-3xl" />
           )}
         </button>
       </div>

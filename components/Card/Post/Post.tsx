@@ -2,10 +2,10 @@
 import { FC, useEffect, useState} from 'react'
 import { IUserPostProps } from '@/types/post'
 import Image from 'next/image'
-import { PostActions } from './PostActions'
-import { PostHeader } from './PostHeader'
-import { PostAuthor } from './PostAuthor'
-import { PostComment } from './PostComment'
+import { PostActions } from './ActionButton'
+import { PostHeader } from './Header'
+import { PostAuthor } from './Author'
+import { PostComment } from './Comments'
 import { db } from '@/config/firebase';
 import { doc, onSnapshot} from 'firebase/firestore'
 
@@ -23,9 +23,7 @@ export interface IPostCardProps {
 }
 
 export const PostCard: FC<IPostCardProps> = ({ post, followingLists, uid, username }) => {
-  const [disabled, setDisabled] = useState<boolean>(false)
   const [comment, setComment] = useState<string>('')
-  const [commentOpen, setCommentOpen] = useState<boolean>(false)
   const [likesCount, setLikesCount] = useState<number>(0)
 
   useEffect(() => {
@@ -60,11 +58,7 @@ export const PostCard: FC<IPostCardProps> = ({ post, followingLists, uid, userna
           alt={post?.author ?? 'user post image'}
         />
         <PostActions
-          commentOpen={commentOpen}
-          disabled={disabled}
-          setDisabled={setDisabled}
           post={post}
-          setCommentOpen={setCommentOpen}
           uid={uid}
         />
         <p className={`font-light text-xs px-1 mt-1 mb-4 ${likesCount < 1 ? 'hidden' : 'block'}`}>
@@ -73,9 +67,7 @@ export const PostCard: FC<IPostCardProps> = ({ post, followingLists, uid, userna
           </span>
         </p>
         <PostAuthor post={post} />
-
         <PostComment
-          commentOpen={commentOpen}
           post={post}
           comment={comment}
           setComment={setComment}

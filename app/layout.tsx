@@ -1,10 +1,10 @@
 import './globals.css'
-import { Header } from '@/components/Header'
-import { Sidebar } from '@/components/Sidebar'
+import { Header } from '@/components/Headers/Header'
+import { Sidebar } from '@/components/Navbar/Sidebar'
 import Head from './head'
 import { Roboto } from '@next/font/google'
 import Providers from '@/util/provider'
-import { Navbar } from '@/components/Navbar'
+import { Navbar } from '@/components/Navbar/Navbar'
 
 interface Props {
   children: React.ReactNode,

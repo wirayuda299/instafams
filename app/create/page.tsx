@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { db, storage } from "@/config/firebase";
 import { arrayUnion, doc, updateDoc, setDoc } from "firebase/firestore";
-import { ImageInput } from "@/components/UploadFile";
+import { ImageInput } from "@/components/Card/FileUpload/UploadFile";
 import { Cropper, getCroppedImg } from "react-cropper-custom";
 import "react-cropper-custom/dist/index.css";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";

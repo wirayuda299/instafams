@@ -1,5 +1,5 @@
 'use client'
-import { ChangeEvent, FC, useCallback } from "react"
+import React,{ ChangeEvent, FC } from "react"
 
 interface IProps {
   setPreviewUrl: React.Dispatch<React.SetStateAction<string | undefined>>

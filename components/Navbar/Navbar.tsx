@@ -1,6 +1,6 @@
 'use client'
 import { FC, useState } from "react"
-import { NavbarList } from "./NavbarList";
+import { NavbarList } from "./Lists";
 
 export const Navbar: FC = () => {
   const [extraListOpen, setExtraListOpen] = useState(false)
