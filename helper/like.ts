@@ -1,7 +1,7 @@
-import { doc, updateDoc, arrayRemove, arrayUnion } from 'firebase/firestore';
+import { doc, updateDoc, arrayRemove, arrayUnion, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { IUserPostProps } from '@/types/post';
-import { getPosts } from './getPosts';
+import { getPosts } from '@/helper/getPosts';
 
 export async function handleLikes(
 	post: IUserPostProps,
@@ -9,11 +9,16 @@ export async function handleLikes(
 ) {
 	try {
 		const postRef = doc(db, 'posts', `post-${post.postId}`);
-		const updateLikes = post.likedBy.includes(uid)
-			? { likedBy: arrayRemove(uid) }
-			: { likedBy: arrayUnion(uid) };
-		await updateDoc(postRef, updateLikes)
+		const getPostDetails = await getDoc(postRef)
+		const likedBy = getPostDetails.data()?.likedBy
+		const haslikedByUsers = likedBy.find((like: string) => like === uid)
+
+		if (haslikedByUsers) {
+			await updateDoc(postRef, { likedBy: arrayRemove(uid) })
+		} else {
+			await updateDoc(postRef, { likedBy: arrayUnion(uid) })
+		}
 	} catch (error: any) {
 		console.error(error.message);
-	} 
+	}
 }

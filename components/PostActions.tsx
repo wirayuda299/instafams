@@ -5,7 +5,7 @@ import { Dispatch, FC, SetStateAction, useEffect, useState } from "react"
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BiBookmark, BiBookmarkHeart } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
-import { doc, onSnapshot } from 'firebase/firestore'
+import { doc, onSnapshot, collection, query } from 'firebase/firestore'
 import { db } from "@/config/firebase";
 
 interface IProps {
@@ -14,39 +14,42 @@ interface IProps {
   uid: string
   setCommentOpen: Dispatch<SetStateAction<boolean>>
   commentOpen: boolean
+  setDisabled: Dispatch<SetStateAction<boolean>>
 }
 
-export const PostActions: FC<IProps> = ({ post, disabled, setCommentOpen, uid, commentOpen }) => {
-  const [likes, setLikes] = useState<any[]>(post.likedBy)
+export const PostActions: FC<IProps> = ({ post, disabled, setCommentOpen, uid, commentOpen, setDisabled }) => {
+  const [likes, setLikes] = useState<any[]>([])
   const [savedPosts, setSavedPosts] = useState<any[]>([])
 
   useEffect(() => {
-    onSnapshot(doc(db, 'posts', `post-${post.postId}`), (doc) => {
+    onSnapshot(doc(db, 'posts', `post-${post.postId}`), async (doc) => {
       if (doc.exists()) {
-        setLikes(doc.data().likedBy)
+        await setLikes(doc.data().likedBy)
       }
     })
-  }, [post.postId])
+  }, [db])
 
   useEffect(() => {
     onSnapshot(doc(db, 'users', `${uid}`), (doc) => {
       if (doc.exists()) {
-        console.log(doc.data().savedPosts)
         setSavedPosts(doc.data().savedPosts)
       }
     })
-  }, [post])
-
+  }, [post.postId])
 
 
   return (
     <div className="flex items-center justify-between mt-3 mb-2 p-1">
       <div className="flex gap-x-5">
         <button
-          data-postid={post.postId}
-          onClick={() => handleLikes(post, uid)}>
+          onClick={() => handleLikes(post, uid) }
+          data-postid={post.postId}>
           {likes.includes(uid)
-            ? <AiFillHeart className="text-3xl text-red-600" /> : <AiOutlineHeart className="text-3xl" />
+            ?
+            <AiFillHeart className="text-3xl animate-pulse text-red-600" />
+            :
+            <AiOutlineHeart className="text-3xl" />
+
           }
         </button>
         <button onClick={() => setCommentOpen(!commentOpen)}>

@@ -1,5 +1,5 @@
 'use client'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState} from 'react'
 import { IUserPostProps } from '@/types/post'
 import Image from 'next/image'
 import { PostActions } from './PostActions'
@@ -8,6 +8,7 @@ import { PostAuthor } from './PostAuthor'
 import { PostComment } from './PostComment'
 import { db } from '@/config/firebase';
 import { doc, onSnapshot} from 'firebase/firestore'
+
 
 export interface ICommentsProps {
   comment: string
@@ -61,6 +62,7 @@ export const PostCard: FC<IPostCardProps> = ({ post, followingLists, uid, userna
         <PostActions
           commentOpen={commentOpen}
           disabled={disabled}
+          setDisabled={setDisabled}
           post={post}
           setCommentOpen={setCommentOpen}
           uid={uid}

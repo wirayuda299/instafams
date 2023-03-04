@@ -79,6 +79,7 @@ export const NavbarList: FC<IProps> = () => {
           key={list.id}
           className={`font-light px-3 py-4 text-base hover:bg-gray-200  transition-all ease duration-300 rounded-full w-full dark:hover:bg-[#b9b9b917] hover:bg-[#a8a8a817] ${list.id === 2 || list.id === 4 ? 'hidden md:block' : ''}`}>
           <Link
+
             href={list.path}
             hrefLang='en'>
             <button className={`flex space-x-2 `} name={list.title}>

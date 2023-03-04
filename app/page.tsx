@@ -4,6 +4,8 @@ import { JWT } from 'next-auth/jwt';
 import Image from 'next/image';
 import { getUser, getUserByUid } from '@/helper/getUser';
 import { getPosts } from '@/helper/getPosts';
+import Loader from '@/components/Loader';
+import { Suspense } from 'react';
 
 export default async function Home() {
 	const getposts = await getPosts()
@@ -22,23 +24,24 @@ export default async function Home() {
 		},
 	});
 	const currentUser = await getUserByUid(session?.user.uid);
-	const followinglists = currentUser && currentUser[0].data().following;
 	const users = await getUser(session.user.uid);
+	const followinglists = currentUser && currentUser[0].data().following;
+	const [posts, sessions, usersLists] = await Promise.all([getposts, session, users]);
 
 	return (
 		<section className='w-full h-full md:p-3 max-w-7xl'>
 			<div className='w-full flex justify-between items-start first:flex-grow'>
 				<div className='w-full h-full flex flex-col p-5'>
-					{getposts?.map((post) => (
-						<PostCard
-							post={post}
-							key={post.docId}
-							username={session.user.username}
-							followingLists={followinglists}
-							uid={session.user.uid}
-						/>
-					))
-					}
+					{posts?.map((post) => (
+						<Suspense fallback={<p>Loading..</p>} key={post.docId}>
+							<PostCard
+								post={post}
+								username={sessions.user.username}
+								followingLists={followinglists}
+								uid={sessions.user.uid}
+							/>
+						</Suspense>
+					))}
 				</div>
 				<section className='min-w-[400px] hidden lg:block'>
 					<div className='w-full h-full p-5 max-w-sm'>
@@ -68,7 +71,7 @@ export default async function Home() {
 							<button className='text-xs dark:text-blue-600 '>See All</button>
 						</div>
 						<div>
-							{users?.map((user) => (
+							{usersLists?.map((user) => (
 								<div
 									key={user.uid}
 									className='flex items-center space-x-2 mb-2 mt-5 w-full justify-between'

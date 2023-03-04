@@ -21,7 +21,7 @@ export const PostComment: FC<IProps> = ({post, commentOpen, comment, setComment,
         setCurrentComments(doc.data().comments)
       }
     })
-  }, [post.postId])
+  }, [db])
   return (
     <div>
        <form
