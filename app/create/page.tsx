@@ -106,11 +106,11 @@ const CreatePost = () => {
     setImg('')
   }
   return (
-    <section className="w-full h-full bg-white dark:bg-[#121212] overflow-y-auto">
-      <div className={`container mx-auto gap-5 grid grid-cols-1 ${!croppedImg ? '' : 'md:grid-cols-2'} p-5`}>
+    <section className="w-full h-full  bg-white dark:bg-[#121212] overflow-y-auto">
+      <div className={`container mx-auto h-full gap-5 grid grid-cols-1 place-items-center ${!croppedImg ? '' : 'md:grid-cols-2'} p-5 md:p-8`}>
         <ImageInput setPreviewUrl={setImg} img={img} />
         <div className={`w-full h-full ${img !== '' ? 'block' : 'hidden'} relative`}>
-          <div className='wrapper max-w-lg relative flex justify-center items-center border rounded-sm'>
+          <div className='wrapper h-full max-w-lg relative flex justify-center items-center rounded-sm'>
             <Cropper
               src={img || ''}
               zoom={zoom}

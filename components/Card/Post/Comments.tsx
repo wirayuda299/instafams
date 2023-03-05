@@ -22,7 +22,7 @@ export const PostComment: FC<IProps> = ({post, comment, setComment, uid,username
         setCurrentComments(doc.data().comments)
       }
     })
-  }, [db])
+  }, [post.postId])
   return (
     <div>
        <form
@@ -36,7 +36,7 @@ export const PostComment: FC<IProps> = ({post, comment, setComment, uid,username
             onChange={e => setComment(e.target.value)}
           />
         </form>
-    <div className={`p-1 ${commentOpen ? 'block' : 'hidden'}`}>
+    <div className={`p-1 pb-2 ${commentOpen ? 'block' : 'hidden'}`}>
       {post.comments.length < 1 ? (
         <p className='text-xs text-center'>No comments yet</p>
       ) : (
