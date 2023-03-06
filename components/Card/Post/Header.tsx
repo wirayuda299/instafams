@@ -46,7 +46,7 @@ export const PostHeader: FC<IProps> = ({ post, currentuserUid, followingLists, u
     }
     setCreatedDate(diffString)
 
-  }, [db])
+  }, [post])
 
   return (
     <div className="flex items-center px-4 py-3">
