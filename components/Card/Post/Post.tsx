@@ -53,9 +53,8 @@ export const PostCard: FC<IPostCardProps> = ({ post, followingLists, uid, userna
             priority={true}
             loading="eager"
             decoding='async'
-            loader={({ src }) => src}
             height={500}
-            quality={70}
+            quality={65}
             alt={post?.author ?? 'user post image'}
           />
         </div>

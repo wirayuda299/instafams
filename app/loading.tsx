@@ -1,6 +1,8 @@
 
 export default function loading() {
   return (
-    <div className="custom-loader"></div>
+   <div className="w-full h-full grid place-items-center">
+     <div className="custom-loader"></div>
+   </div>
   )
 }
