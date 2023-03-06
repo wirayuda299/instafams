@@ -2,7 +2,6 @@
 import { FC, useEffect, useState } from "react"
 import Image from "next/image"
 import { handleFollow } from "@/helper/follow"
-import { BsThreeDots } from "react-icons/bs"
 import { IUserPostProps } from '@/types/post';
 
 interface IProps {
@@ -14,6 +13,7 @@ interface IProps {
 
 export const PostHeader: FC<IProps> = ({ post, currentuserUid, followingLists, username }) => {
   const [createdDate, setCreatedDate] = useState<string>('')
+
   useEffect(() => {
     const now = Date.now();
     const diff = now - Number(post.createdAt);
@@ -46,6 +46,7 @@ export const PostHeader: FC<IProps> = ({ post, currentuserUid, followingLists, u
     setCreatedDate(diffString)
 
   }, [])
+
   return (
     <div className="flex items-center px-4 py-3">
       <Image
@@ -60,20 +61,25 @@ export const PostHeader: FC<IProps> = ({ post, currentuserUid, followingLists, u
         <span className="text-sm font-semibold antialiased block leading-tight">
           {post?.author}
         </span>
-        <span className="text-xs font-thin antialiased block leading-tight">
+
+        <span className={`text-xs font-thin antialiased block leading-tight ${currentuserUid === post.postedById ? 'hidden pointer-events-none' : ''}`}>
           {createdDate}
         </span>
+
+
       </div>
-      {currentuserUid !== post.postedById ? (
-        <button onClick={() => handleFollow(post.postedById, currentuserUid, username)} className="follBtn text-xs  antialiased block leading-tight" data-postid={post.postedById}>
-          {followingLists?.map((user) => user.userId).includes(post.postedById) ? 'Following' : 'Follow'}
-        </button>
-      ) : null}
-      {currentuserUid === post.postedById ? (
-        <button className="text-sm font-semibold antialiased block leading-tight">
-          <BsThreeDots className="text-2xl" />
-        </button>
-      ) : null}
+      <div className="relative flex justify-between items-center">
+        {currentuserUid !== post.postedById ? (
+          <button onClick={() => handleFollow(post.postedById, currentuserUid, username)} className="follBtn text-xs  antialiased block leading-tight" data-postid={post.postedById}>
+            {followingLists?.map((user) => user.userId).includes(post.postedById) ? 'Following' : 'Follow'}
+          </button>
+        ) :
+          (
+            <p className="text-xs font-thin antialiased block leading-tight">
+              {createdDate}
+            </p>
+          )}
+      </div>
     </div>
   )
 };

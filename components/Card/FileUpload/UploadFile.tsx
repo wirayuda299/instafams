@@ -7,11 +7,9 @@ interface IProps {
 }
 
 export const ImageInput: FC<IProps> = ({ setPreviewUrl, img }) => {
-
   const handleInputImage = async (e: ChangeEvent<HTMLInputElement>) => {
     let selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
-
     const reader = new FileReader();
     reader.onload = async (event) => {
       if (event.target) {

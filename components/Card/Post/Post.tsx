@@ -1,5 +1,5 @@
 'use client'
-import { FC, useEffect, useState} from 'react'
+import { FC, useEffect, useState } from 'react'
 import { IUserPostProps } from '@/types/post'
 import Image from 'next/image'
 import { PostActions } from './ActionButton'
@@ -7,7 +7,7 @@ import { PostHeader } from './Header'
 import { PostAuthor } from './Author'
 import { PostComment } from './Comments'
 import { db } from '@/config/firebase';
-import { doc, onSnapshot} from 'firebase/firestore'
+import { doc, onSnapshot } from 'firebase/firestore'
 
 
 export interface ICommentsProps {
@@ -28,35 +28,38 @@ export const PostCard: FC<IPostCardProps> = ({ post, followingLists, uid, userna
 
   useEffect(() => {
     onSnapshot(doc(db, "posts", `post-${post.postId}`), (doc) => {
-        if(doc.exists()) {
-          setLikesCount(doc.data().likedBy.length)
-        }
+      if (doc.exists()) {
+        setLikesCount(doc.data().likedBy.length)
+      }
     });
   }, [post.postId])
-  
+
   return (
-    <div className="w-full">
-      <div className="bg-white shadow-lg dark:bg-black dark:border-black dark:text-white rounded-sm overflow-hidden">
+    <div className="w-full relative my-2">
+      <div className="bg-white shadow-lg  dark:bg-black dark:border-black dark:text-white rounded-sm overflow-hidden">
         <PostHeader
           currentuserUid={uid}
           followingLists={followingLists}
           post={post}
           username={username}
         />
-        <Image
-          className="w-full"
-          src={post.image}
-          width={500}
-          placeholder="blur"
-          blurDataURL={'blur'}
-          priority={true}
-          loading="eager"
-          decoding='async'
-          loader={({ src }) => src}
-          height={500}
-          quality={70}
-          alt={post?.author ?? 'user post image'}
-        />
+        <div className='relative h-full w-full mx-auto'>
+          <Image
+            className="w-full"
+            src={post.image}
+            width={500}
+            placeholder="blur"
+            blurDataURL={'blur'}
+            priority={true}
+            loading="eager"
+            decoding='async'
+            loader={({ src }) => src}
+            height={500}
+            quality={70}
+            alt={post?.author ?? 'user post image'}
+          />
+        </div>
+
         <PostActions
           post={post}
           uid={uid}

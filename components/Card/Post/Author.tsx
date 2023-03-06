@@ -10,9 +10,10 @@ export const PostAuthor: FC<IProps> = ({ post }) => {
     <div className='flex items-center gap-2 px-1'>
       <h5 className='font-semibold text-md'>{post?.author}</h5>
       <p className='text-sm font-thin'>{post.captions}</p>
-      <div>{post.hashtags.map((hastag, i) => (
-        <span key={hastag} className='text-xs font-normal text-blue-500'>{hastag}</span>
-      ))}
+      <div>
+        {post.hashtags.map((hastag, i) => (
+          <span key={hastag} className='text-xs font-normal text-blue-500'>{hastag}</span>
+        ))}
       </div>
     </div>
   )

@@ -1,16 +1,13 @@
 import { handleLikes } from "@/helper/like";
 import { savePost } from "@/helper/savePost";
 import { IUserPostProps } from "@/types/post";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react"
+import {  FC, useEffect, useState } from "react"
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { BiBookmark, BiBookmarkHeart } from "react-icons/bi";
-import { FaBookmark, FaRegComment } from "react-icons/fa";
+import {  FaRegComment } from "react-icons/fa";
 import { doc, onSnapshot } from 'firebase/firestore'
 import { db } from "@/config/firebase";
 import { CommentsToggler } from "@/store/CommentsToggler";
 import { useRecoilState } from "recoil";
-import { BsFillBookmarkFill } from "react-icons/bs";
-import {FiBookmark} from "react-icons/fi";
 import { RiBookmarkFill, RiBookmarkLine } from "react-icons/ri";
 interface IProps {
   post: IUserPostProps
@@ -28,7 +25,7 @@ export const PostActions: FC<IProps> = ({ post, uid }) => {
         await setLikes(doc.data().likedBy)
       }
     })
-  }, [db])
+  }, [post.postId])
 
   useEffect(() => {
     onSnapshot(doc(db, 'users', `${uid}`), (doc) => {

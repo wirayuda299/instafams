@@ -60,9 +60,7 @@ const extraList: INavProps[] = [
 export const ExtraMenus = () => {
   const handleSignOut = async () => {
     try {
-      await signOut().then(() => {
-        console.log('success logout');
-      })
+      await signOut()
     } catch (error) {
       console.log(error);
     }

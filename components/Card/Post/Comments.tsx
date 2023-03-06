@@ -5,6 +5,7 @@ import { onSnapshot, doc } from "firebase/firestore";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react"
 import { useRecoilState } from 'recoil';
 import { CommentsToggler } from "@/store/CommentsToggler";
+
 interface IProps {
   post: IUserPostProps
   comment: string
