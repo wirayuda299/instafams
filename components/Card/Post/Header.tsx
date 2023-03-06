@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from "react"
 import Image from "next/image"
 import { handleFollow } from "@/helper/follow"
 import { IUserPostProps } from '@/types/post';
+import { db } from "@/config/firebase";
 
 interface IProps {
   currentuserUid: string
@@ -45,7 +46,7 @@ export const PostHeader: FC<IProps> = ({ post, currentuserUid, followingLists, u
     }
     setCreatedDate(diffString)
 
-  }, [])
+  }, [db])
 
   return (
     <div className="flex items-center px-4 py-3">

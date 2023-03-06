@@ -32,7 +32,7 @@ export const PostCard: FC<IPostCardProps> = ({ post, followingLists, uid, userna
         setLikesCount(doc.data().likedBy.length)
       }
     });
-  }, [post.postId])
+  }, [db, post.postId])
 
   return (
     <div className="w-full relative my-2">
