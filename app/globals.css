@@ -32,3 +32,26 @@
 @keyframes s3 {
   100% {transform: rotate(1turn)}
 }
+
+.post-image {
+  opacity: 0;
+  filter: blur(5px);
+
+}
+
+.post-image.active {
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none;
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    display: block;
+    filter: blur(0);
+  }
+}

@@ -23,6 +23,7 @@ export default function Posts({ username, uid, followinglists }: IPostsProps) {
     <Suspense fallback={<Loader />} >
       {posts.map((post) => (
         <PostCard
+        key={post.docId}
           post={post}
           username={username}
           followingLists={followinglists}

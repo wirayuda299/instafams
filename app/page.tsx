@@ -1,8 +1,6 @@
 import { getServerSession } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import { getUserRecommendation, getCurrentUserData } from '@/helper/getUser';
-import { getPosts } from '@/helper/getPosts';
-import Loader from '@/components/Loader/Loader';
 import { Suspense } from 'react';
 import Suggestions from '@/components/Suggestions/Suggestions';
 import Posts from './Posts';

@@ -2,8 +2,8 @@ import React from 'react'
 
 export default function loading() {
   return (
-    <div>
-      Loading user
+    <div className="w-full h-full grid place-items-center">
+      <div className="custom-loader"></div>
     </div>
   )
 }

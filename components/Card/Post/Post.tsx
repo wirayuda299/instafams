@@ -34,6 +34,24 @@ export const PostCard: FC<IPostCardProps> = ({ post, followingLists, uid, userna
     });
   }, [db, post.postId])
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active')
+        } else {
+          entry.target.classList.remove('active')
+        }
+
+      })
+    })
+
+    const target = document.querySelectorAll('.post-image')
+    target.forEach(item => {
+      observer.observe(item)
+    })
+  }, [post])
+
   return (
     <div className="w-full relative my-2">
       <div className="bg-white shadow-lg  dark:bg-black dark:border-black dark:text-white rounded-sm overflow-hidden">
@@ -45,13 +63,12 @@ export const PostCard: FC<IPostCardProps> = ({ post, followingLists, uid, userna
         />
         <div className='relative h-full w-full mx-auto'>
           <Image
-            className="w-full"
+            className="w-full post-image"
             src={post.image}
             width={500}
             placeholder="blur"
             blurDataURL={'blur'}
-            priority={true}
-            loading="eager"
+            loading="lazy"
             decoding='async'
             height={500}
             quality={65}
