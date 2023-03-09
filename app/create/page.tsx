@@ -60,7 +60,6 @@ const CreatePost = () => {
         const setPosts = setDoc(doc(db, 'posts', `post-${uuid}`), {
           captions: captions.match(/^[^#]*/),
           postedById: session?.user?.uid,
-          likes: 0,
           author: session?.user && session?.user.username,
           comments: [],
           image: downloadUrl,
@@ -76,7 +75,6 @@ const CreatePost = () => {
           posts: arrayUnion({
             captions: captions.match(/^[^#]*/),
             postedById: session?.user?.uid,
-            likes: 0,
             comments: [],
             image: downloadUrl,
             postedByPhotoUrl: session?.user && session?.user.image,
