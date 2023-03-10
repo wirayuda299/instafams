@@ -68,9 +68,9 @@ export const PostCard: FC<IPostCardProps> = ({ post, followingLists, uid, userna
             width={500}
             placeholder="blur"
             blurDataURL={'blur'}
-            loading="lazy"
             decoding='async'
             height={500}
+            priority
             quality={65}
             alt={post?.author ?? 'user post image'}
           />

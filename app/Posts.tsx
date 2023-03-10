@@ -20,16 +20,18 @@ export default function Posts({ username, uid, followinglists }: IPostsProps) {
     })
   }, [db])
   return (
-    <Suspense fallback={<Loader />} >
-      {posts.map((post) => (
-        <PostCard
-        key={post.docId}
-          post={post}
-          username={username}
-          followingLists={followinglists}
-          uid={uid}
-        />
-      ))}
-    </Suspense>
+    <>
+      {
+        posts.map((post) => (
+          <Suspense fallback={<Loader />} key={post?.postId}>
+            <PostCard
+              post={post}
+              username={username}
+              followingLists={followinglists}
+              uid={uid}
+            />
+          </Suspense>
+        ))
+      }</>
   )
 }

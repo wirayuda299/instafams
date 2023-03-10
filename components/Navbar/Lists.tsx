@@ -62,7 +62,7 @@ export const NavbarList: FC<IProps> = () => {
     {
       id: 7,
       title: 'Profile',
-      path: '/profile',
+      path: `/user/profile/${session?.user.uid}`,
       icon: <Image
         className='w-7 h-7 rounded-full'
         src={session?.user?.image || ''}

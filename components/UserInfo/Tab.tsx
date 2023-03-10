@@ -40,7 +40,7 @@ export default function Tab() {
             setTaggedPosts(true)
         }
     }
-    
+
     return (
         <div className='mx-auto max-w-2xl border-b-2'>
             <div className='flex justify-around py-3 items-center w-full gap-x-5 pb-5'>
@@ -49,7 +49,7 @@ export default function Tab() {
                         key={tab.id}
                         className={`${activeTab === tab.id ? 'border-b-2 border-black pb-1' : ''}`}
                         onClick={() => handleTabClick(tab.id)}
-                        >
+                    >
                         <span>
                             {tab.icon}
                         </span>

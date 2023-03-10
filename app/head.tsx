@@ -1,7 +1,6 @@
 export default function Head() {
   return (
     <>
-      <title>InstaFams - Connect with friends and family</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta charSet="utf-8" />
       <meta name="keywords" content="social media, social network, InstaFams, connect with friends, connect with like-minded people, online community, social platform" />

@@ -4,7 +4,11 @@ import { getUserRecommendation, getCurrentUserData } from '@/helper/getUser';
 import { Suspense } from 'react';
 import Suggestions from '@/components/Suggestions/Suggestions';
 import Posts from './Posts';
+import { Metadata } from 'next'
 
+export const metadata:Metadata = {
+  title: 'InstaFams | Connect with peeple around the world',
+}
 export default async function Home() {
 	const session = await getServerSession({
 		callbacks: {

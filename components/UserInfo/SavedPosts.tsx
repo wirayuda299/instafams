@@ -28,7 +28,7 @@ export default function SavedPosts({ uid }: { uid: string }) {
               <div key={post?.postId} className='relative w-full group'>
                 <Image
                   src={post?.image}
-                  alt={post?.captions}
+                  alt={post?.captions ?? ' post image'}
                   width={500}
                   height={500}
                   className='rounded-md object-cover w-full'

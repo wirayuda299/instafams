@@ -2,7 +2,7 @@ import './globals.css'
 import { Header } from '@/components/Headers/Header'
 import { Sidebar } from '@/components/Navbar/Sidebar'
 import Head from './head'
-import { Roboto } from '@next/font/google'
+import { Roboto } from 'next/font/google'
 import Providers from '@/util/provider'
 import { Navbar } from '@/components/Navbar/Navbar'
 
@@ -14,9 +14,8 @@ const roboto = Roboto({
   weight: '400',
   preload: true,
   fallback: ['sans-serif'],
-  display: 'swap',
-  
 })
+
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
