@@ -8,9 +8,8 @@ import Statistic from "@/components/UserInfo/Statistic";
 import Tab from "@/components/UserInfo/Tab";
 import SavedPosts from "@/components/UserInfo/SavedPosts";
 import { Metadata } from "next";
-import Head from "@/app/head";
 
-interface IUser {
+export interface IUser {
     image: string,
     createdAt: string,
     following: {
@@ -22,7 +21,6 @@ interface IUser {
     email: string,
     savedPosts: IUserPostProps[],
     uid: string,
-    posts: IUserPostProps[],
     username: string
 }
 export async function generateMetadata({ params }: {params: {id: string}}): Promise<Metadata> {
@@ -68,9 +66,7 @@ export default async function Profile({params}: {params: {id: string}}) {
                     />
                     <Statistic
                         username={session.user.username}
-                        posts={user[0].posts}
-                        followers={user[0].followers}
-                        following={user[0].following}
+                        uid={session.user.uid}
                     />
                 </div>
             </div>

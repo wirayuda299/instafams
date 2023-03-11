@@ -1,35 +1,50 @@
+'use client'
+import { IUser } from "@/app/user/profile/[id]/page";
+import { db } from "@/config/firebase";
 import { IUserPostProps } from "@/types/post";
-
+import { onSnapshot, query, collection, where } from "firebase/firestore";
+import { useEffect, useState } from 'react';
 interface IProps {
   username: string;
-  posts: IUserPostProps[]
-  followers: {
-    userId: string
-  }[]
-  following: {
-    userId: string
-  }[]
+  uid:string
 }
 
-export default function Statistic({ username, posts, followers, following,}: IProps) {
+export default function Statistic({ username, uid,}: IProps) {
+  const [userPosts, setUserPosts] = useState<IUserPostProps[]>([])
+  const [users, setUsers] = useState<IUser[]>([])
+  
+  useEffect(() => {
+    onSnapshot(query(collection(db, "posts"),  where("postedById", "==", `${uid}`)), (snapshot) => {
+      setUserPosts(snapshot.docs.map((doc) => doc.data() as IUserPostProps))
+    })
+  }, [db])
+
+  useEffect(() => {
+    onSnapshot(query(collection(db, "users"), where("uid", "==", `${uid}`)), (snapshot) => {
+      setUsers(snapshot.docs.map((doc) => doc.data() as IUser))
+    })
+  }, [db])
+  
   const data = [
     {
       id: 1, 
       title: 'Posts',
-      value: posts.length
+      value: userPosts.length
       },
     {
       id: 2, 
       title: 'Followers',
-      value: followers.length
+      value: users[0]?.followers.length
       },
     {
       id: 1, 
       title: 'Following',
-      value: following.length
+      value: users[0]?.following.length
       },
 
   ]  
+
+
   return (
     <div>
       <div className='text-black'>

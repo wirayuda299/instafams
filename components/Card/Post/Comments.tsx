@@ -16,7 +16,7 @@ interface IProps {
 
 export const PostComment: FC<IProps> = ({post, comment, setComment, uid,username}) => {
   const [currentComments , setCurrentComments] = useState<any[]>(post.comments)
-  const [commentOpen , setCommentOpen] = useRecoilState(CommentsToggler)
+  const [commentOpen , setCommentOpen] = useState(false)
   useEffect(() => {
     onSnapshot(doc(db, 'posts', `post-${post.postId}`), (doc) => {
       if(doc.exists()) {

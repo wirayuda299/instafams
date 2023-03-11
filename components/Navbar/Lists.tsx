@@ -73,13 +73,12 @@ export const NavbarList: FC<IProps> = () => {
     },
   ]
   return (
-    <ul className='flex w-full dark:bg-black justify-center items-center sm:items-start flex-row md:flex-col px-1 transition-all ease duration-500'>
+    <ul className='flex w-full dark:bg-black justify-around items-center sm:items-start flex-row md:flex-col px-1 md:py-3 transition-all ease duration-500'>
       {navList.map(list => (
         <li
           key={list.id}
-          className={`font-light px-3 py-4 text-base hover:bg-gray-200  transition-all ease duration-300 rounded-full w-full dark:hover:bg-[#b9b9b917] hover:bg-[#a8a8a817] ${list.id === 2 || list.id === 4 ? 'hidden md:block' : ''}`}>
+          className={`font-light p-2 md:px-3 md:py-3 text-base hover:bg-gray-200  transition-all ease duration-300 rounded-full w-fit md:w-full md:h-full dark:hover:bg-[#b9b9b917] hover:bg-[#a8a8a817] ${list.id === 2 || list.id === 5 ? 'hidden md:block' : ''}`}>
           <Link
-
             href={list.path}
             hrefLang='en'>
             <button className={`flex space-x-2 `} name={list.title}>

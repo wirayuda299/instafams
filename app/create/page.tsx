@@ -6,7 +6,7 @@ import { ImageInput } from "@/components/Card/FileUpload/UploadFile";
 import { Cropper, getCroppedImg } from "react-cropper-custom";
 import "react-cropper-custom/dist/index.css";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
-import { useSession } from "next-auth/react";
+import { getCsrfToken, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AiOutlineClose } from "react-icons/ai";
@@ -45,19 +45,20 @@ const CreatePost = () => {
   };
 
   const handlePost = async () => {
-    if (!session) router.push('/auth/signin')
     if (!img) return
+
     setLoading(true)
     const hashtags = captions.match(/#(?!\n)(.+)/g)?.join(' ').split(' ') || [];
     const randomNum = Math.floor(Math.random() * 7654391);
-    const userRef = doc(db, 'users', `${session?.user?.uid || ''}`);
     const uuid = crypto.randomUUID()
 
     try {
+      if (!session) router.push('/auth/signin')
+
       const imageRef = ref(storage, `post/${uuid}/image`)
       await uploadString(imageRef, croppedImg ?? '', 'data_url').then(async () => {
         const downloadUrl = await getDownloadURL(imageRef)
-        const setPosts = setDoc(doc(db, 'posts', `post-${uuid}`), {
+        await setDoc(doc(db, 'posts', `post-${uuid}`), {
           captions: captions.match(/^[^#]*/),
           postedById: session?.user?.uid,
           author: session?.user && session?.user.username,
@@ -70,28 +71,13 @@ const CreatePost = () => {
           hashtags,
           tags: [],
           postId: uuid
-        })
-        const addPostToUserPostlist = updateDoc(userRef, {
-          posts: arrayUnion({
-            captions: captions.match(/^[^#]*/),
-            postedById: session?.user?.uid,
-            comments: [],
-            image: downloadUrl,
-            postedByPhotoUrl: session?.user && session?.user.image,
-            likedBy: [],
-            docId: `post-${randomNum}`,
-            createdAt: Date.now(),
-            hashtags,
-            tags: [],
-            postId: uuid
-          })
-        })
-        await Promise.all([setPosts, addPostToUserPostlist]).then(() => {
+        }).then(() => {
           setCroppedImg('')
           setCaptions('')
           setImg('')
           setLoading(false)
         })
+
       })
     } catch (error: any) {
       setLoading(false)
@@ -104,8 +90,8 @@ const CreatePost = () => {
     setImg('')
   }
   return (
-    <section className="w-full h-full  bg-white dark:bg-[#121212] overflow-y-auto">
-      <div className={`container mx-auto h-full gap-5 grid grid-cols-1 place-items-center ${!croppedImg ? '' : 'md:grid-cols-2'} p-5 md:p-8`}>
+    <section className="w-full h-full min-h-screen bg-white dark:bg-[#121212] overflow-y-auto p-5">
+      <div className={`container mx-auto h-full gap-5 grid grid-cols-1 place-items-center ${!croppedImg ? '' : 'md:grid-cols-2'} py-10 md:p-8`}>
         <ImageInput setPreviewUrl={setImg} img={img} />
         <div className={`w-full h-full ${img !== '' ? 'block' : 'hidden'} relative`}>
           <div className='wrapper h-full max-w-lg relative flex justify-center items-center rounded-sm'>
@@ -116,7 +102,7 @@ const CreatePost = () => {
               onZoomChange={setZoom}
               onCropComplete={onCropComplete}
             />
-            <button className="absolute -top-3 -right-3 text-white" onClick={(e) => deleteImage(e)}>
+            <button className="absolute -top-3 -right-3 text-black dark:text-white" onClick={(e) => deleteImage(e)}>
               <AiOutlineClose size={25} />
             </button>
           </div>
@@ -126,8 +112,9 @@ const CreatePost = () => {
             <Image
               className="rounded-full p-3"
               src={session?.user?.image || ''}
-              alt=""
+              alt={session?.user?.username || ''}
               width={60}
+              priority
               height={60} />
             <p className="text-sm md:text-lg font-semibold dark:text-white">{session?.user?.username}</p>
           </div>

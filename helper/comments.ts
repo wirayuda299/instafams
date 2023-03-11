@@ -7,6 +7,7 @@ export async function handleComment(e: FormEvent, comment: string, post: IUserPo
   e.preventDefault()
   if (comment === '') return
   try {
+    
     const postRef = doc(db, 'posts', `post-${post.postId}`);
     const res = await getDoc(postRef);
     if (res.exists()) {

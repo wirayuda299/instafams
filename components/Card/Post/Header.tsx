@@ -4,6 +4,8 @@ import Image from "next/image"
 import { handleFollow } from "@/helper/follow"
 import { IUserPostProps } from '@/types/post';
 import { db } from "@/config/firebase";
+import { query, collection, onSnapshot, where, DocumentData } from 'firebase/firestore'
+import { IUser } from "@/app/user/profile/[id]/page";
 
 interface IProps {
   currentuserUid: string
@@ -14,6 +16,7 @@ interface IProps {
 
 export const PostHeader: FC<IProps> = ({ post, currentuserUid, followingLists, username }) => {
   const [createdDate, setCreatedDate] = useState<string>('')
+  const [users, setUsers] = useState<DocumentData[]>([])
 
   useEffect(() => {
     const now = Date.now();
@@ -48,6 +51,11 @@ export const PostHeader: FC<IProps> = ({ post, currentuserUid, followingLists, u
 
   }, [post])
 
+  useEffect(() => {
+    onSnapshot(query(collection(db, "users"), where('uid', '==', `${currentuserUid}`)), (snapshot) => {
+      setUsers(snapshot.docs.map((doc) => doc.data()))
+    })
+  }, [db])
   return (
     <div className="flex items-center px-4 py-3">
       <Image
@@ -66,13 +74,11 @@ export const PostHeader: FC<IProps> = ({ post, currentuserUid, followingLists, u
         <span className={`text-xs font-thin antialiased block leading-tight ${currentuserUid === post.postedById ? 'hidden pointer-events-none' : ''}`}>
           {createdDate}
         </span>
-
-
       </div>
       <div className="relative flex justify-between items-center">
         {currentuserUid !== post.postedById ? (
           <button onClick={() => handleFollow(post.postedById, currentuserUid, username)} className="follBtn text-xs  antialiased block leading-tight" data-postid={post.postedById}>
-            {followingLists?.map((user) => user.userId).includes(post.postedById) ? 'Following' : 'Follow'}
+           {users[0]?.following.find((foll: { userId: string; }) => foll.userId === post.postedById) ? 'Following' : 'Follow'}
           </button>
         ) :
           (

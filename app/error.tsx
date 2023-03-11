@@ -1,11 +1,8 @@
-'use client'; // Error components must be Client components
+'use client'; 
 
 import { useEffect } from 'react';
 
-export default function Error({
-  error,
-  reset,
-}: {
+export default function Error({error,reset}: {
   error: Error;
   reset: () => void;
 }) {
@@ -14,9 +11,10 @@ export default function Error({
   }, [error]);
 
   return (
-    <div>
+    <div className='w-full h-full grid place-items-center'>
       <h2>Something went wrong!</h2>
       <button
+       className='bg-black dark:bg-white text-white dark:text-black rounded-md p-2'
         onClick={() => reset()}>
         Try again
       </button>
