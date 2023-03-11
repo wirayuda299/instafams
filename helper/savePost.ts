@@ -1,21 +1,23 @@
-import { doc, getDoc, updateDoc, arrayRemove, arrayUnion } from "firebase/firestore"
+import { doc, getDoc, updateDoc, arrayRemove, arrayUnion, collection, query, where, getDocs } from "firebase/firestore"
 import { db } from "../config/firebase"
 import { IUserPostProps } from "@/types/post"
-import { getPosts } from "./getPosts"
+
 export async function savePost(post: IUserPostProps, uid: string = '') {
   try {
-    const userRef = doc(db, "users", `${uid}`)
-    const res = await getDoc(userRef)
-    const user = [res.data()]
-    const getSavedPosts = user?.map((user) => user?.savedPosts)
-    const isAlreadySavedByUser = getSavedPosts[0]?.some((posts: { postId: string }) => posts.postId === post.postId)
-
-    if (isAlreadySavedByUser) {
-      await updateDoc(userRef, { savedPosts: arrayRemove(post) })
+    const userRef = query(collection(db, "users"), where("uid", "==", uid));
+    const userSnap = await getDocs(userRef);
+    const savedPosts = userSnap.docs[0].data().savedPosts;
+    const hasSaved = savedPosts.find((post: { postId: number; }) => post.postId === post.postId)
+    if(hasSaved) {
+      await updateDoc(doc(db, 'users', `${uid}`), {
+        savedPosts: arrayRemove(post.postId)
+      })
     } else {
-      await updateDoc(userRef, { savedPosts: arrayUnion(post) })
+      await updateDoc(doc(db, 'users', `${uid}`), {
+        savedPosts: arrayUnion(post.postId)
+      })
     }
-
+    
   } catch (error: any) {
     console.log(error.message);
   }

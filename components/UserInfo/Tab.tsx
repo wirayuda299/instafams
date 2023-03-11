@@ -13,15 +13,15 @@ export default function Tab() {
     const tabValue = [
         {
             id: 1,
-            icon: <BsGrid3X3Gap size={25} />
+            icon: <BsGrid3X3Gap size={25} className='text-black dark:text-white' />
         },
         {
             id: 2,
-            icon: <BsBookmark size={25} />
+            icon: <BsBookmark size={25} className='text-black dark:text-white' />
         },
         {
             id: 3,
-            icon: <BsPersonSquare size={25} />
+            icon: <BsPersonSquare size={25} className='text-black dark:text-white' />
         },
     ]
     const handleTabClick = (tabId: number) => {
@@ -42,7 +42,7 @@ export default function Tab() {
     }
 
     return (
-        <div className='mx-auto max-w-2xl border-b-2'>
+        <div className='mx-auto max-w-2xl'>
             <div className='flex justify-around py-3 items-center w-full gap-x-5 pb-5'>
                 {tabValue.map((tab) => (
                     <button

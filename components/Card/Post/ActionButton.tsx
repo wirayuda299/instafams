@@ -35,7 +35,6 @@ export const PostActions: FC<IProps> = ({ post, uid }) => {
     })
   }, [post.postId])
 
-
   return (
     <div className="flex items-center justify-between mt-3 mb-2 p-1">
       <div className="flex gap-x-5">
@@ -58,7 +57,7 @@ export const PostActions: FC<IProps> = ({ post, uid }) => {
       </div>
       <div className="flex">
         <button className='saveBtn' data-saveid={post.postId} onClick={() => savePost(post, uid)} >
-          {savedPosts.map(post => post.postId).includes(post.postId) ? (
+          {savedPosts.includes(post.postId) ? (
             <RiBookmarkFill className="text-3xl" />
           ) : (
             <RiBookmarkLine className="text-3xl" />

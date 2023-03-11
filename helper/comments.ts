@@ -20,7 +20,7 @@ export async function handleComment(e: FormEvent, comment: string, post: IUserPo
         setComment('')
       });
     }
-  } catch (error) {
-    console.log(error);
+  } catch (error:any) {
+    console.log(error.message);
   }
 }
